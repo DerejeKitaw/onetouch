@@ -15,7 +15,7 @@ public class RegistrationServiceImpl implements RegisterService {
 	RegistrationDao registrationDao;
 
 	@Override
-	public String registerUser(RegistrationModel registrationModel) {
+	public RegistrationModel registerUser(RegistrationModel registrationModel) {
 		// TODO Auto-generated method stub
 		return registrationDao.registerUser(registrationModel);
 	}
@@ -24,6 +24,12 @@ public class RegistrationServiceImpl implements RegisterService {
 	public RegistrationModel validateLogin(LoginModel loginModel) {
 		// TODO Auto-generated method stub
 		return registrationDao.validateLogin(loginModel);
+	}
+
+	@Override
+	public String updateProfile(RegistrationModel registrationModel) {
+		// TODO Auto-generated method stub
+		return registrationDao.updateProfile(registrationModel);
 	}
 
 }

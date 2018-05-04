@@ -7,6 +7,7 @@ import com.onetouch.models.RegistrationModel;
 
 public interface RegisterService {
 
-	public String registerUser(RegistrationModel registrationModel);
+	public RegistrationModel registerUser(RegistrationModel registrationModel);
 	public RegistrationModel validateLogin(LoginModel loginModel);
+	public String updateProfile(RegistrationModel registrationModel);
 }

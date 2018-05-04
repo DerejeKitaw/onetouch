@@ -1,6 +1,7 @@
 package com.onetouch.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,25 +24,27 @@ public class RegistrationController {
 	@Autowired
 	RegisterService registerService;
 	
+	//@CrossOrigin(origins = "http://172.17.12.95:8080",maxAge = 3600)
 	@RequestMapping(value="register",method=RequestMethod.POST,consumes = { "application/json" }, produces="application/json")
-	public String registerUser(@RequestBody RegistrationModel registrationModel )
+	public RegistrationModel registerUser(@RequestBody RegistrationModel registrationModel )
 	{
 		log.info("Inside Registration Controller");
 		log.info("RegistrationModel :: "+registrationModel.toString());
-		System.out.println("RegistrationModel :: "+registrationModel.toString());
-		String registered =registerService.registerUser(registrationModel);
-		log.info("Registerd :: "+registered);
-		System.out.println("Registerd :: "+registered);
-		return registered;
+		return registerService.registerUser(registrationModel);
 	}
 	
 	@RequestMapping(value="validLogin",method=RequestMethod.POST,consumes = { "application/json" }, produces="application/json")
 	public RegistrationModel validLogin(@RequestBody LoginModel loginModel)
 	{
 		log.info("LoginModel :: "+loginModel.toString());
-		System.out.println("LoginModel :: "+loginModel.toString());
 		return registerService.validateLogin(loginModel);
 	}
 	
-	
+
+	@RequestMapping(value="updateProfile",method=RequestMethod.POST,consumes = { "application/json" }, produces="application/json")
+	public String updateProfile(@RequestBody RegistrationModel registrationModel)
+	{
+		log.info("updateProfile :: "+registrationModel.toString());
+		return registerService.updateProfile(registrationModel);
+	}
 }
