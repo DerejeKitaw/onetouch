@@ -27,7 +27,7 @@ public class RegistrationServiceImpl implements RegisterService {
 	}
 
 	@Override
-	public String updateProfile(RegistrationModel registrationModel) {
+	public RegistrationModel updateProfile(RegistrationModel registrationModel) {
 		// TODO Auto-generated method stub
 		return registrationDao.updateProfile(registrationModel);
 	}

@@ -42,7 +42,7 @@ public class RegistrationController {
 	
 
 	@RequestMapping(value="updateProfile",method=RequestMethod.POST,consumes = { "application/json" }, produces="application/json")
-	public String updateProfile(@RequestBody RegistrationModel registrationModel)
+	public RegistrationModel updateProfile(@RequestBody RegistrationModel registrationModel)
 	{
 		log.info("updateProfile :: "+registrationModel.toString());
 		return registerService.updateProfile(registrationModel);

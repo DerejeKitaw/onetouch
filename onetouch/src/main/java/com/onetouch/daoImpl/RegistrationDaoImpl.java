@@ -27,6 +27,28 @@ public class RegistrationDaoImpl implements RegistrationDao {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	public RegistrationModel userProfileData(String mobileNo)
+	{
+		String updateDataQuery = ExtractingProperty.getProperty("updatedProfileData", "", "queries");
+		log.info("Profile Updation Query "+updateDataQuery);
+		RegistrationModel registrationModel=new RegistrationModel();
+		if(mobileNo!=null)
+		{
+			registrationModel=jdbcTemplate.queryForObject(updateDataQuery, new Object[] {mobileNo}, new BeanPropertyRowMapper<RegistrationModel>(RegistrationModel.class));
+			//log.info("Profile Data After Updation"+registrationModel.toString());
+			registrationModel.setMessage("profileUpdatedSuccessfully");
+			log.info("Profile Data After Message Updation"+registrationModel.toString());
+			return registrationModel;
+		}
+		else {
+			registrationModel.setMessage("NoMobileNumber");
+			log.info("Profile Data After Message Updation"+registrationModel.toString());
+			return registrationModel;
+		}
+		
+		
+	}
 
 	@Override
 	public RegistrationModel registerUser(RegistrationModel registrationModel) {
@@ -97,7 +119,7 @@ public class RegistrationDaoImpl implements RegistrationDao {
 	}
 
 	@Override
-	public String updateProfile(RegistrationModel registrationModel) {
+	public RegistrationModel updateProfile(RegistrationModel registrationModel) {
 		// TODO Auto-generated method stub
 		String updateFields = "";
 		log.info("registrationModel" + registrationModel.toString());
@@ -132,11 +154,10 @@ public class RegistrationDaoImpl implements RegistrationDao {
 					ExtractingProperty.getProperty("updatedProfile", "", "smsMessages"),
 					registrationModel.getPhone_no());
 			log.info("SMS Repsonse " + smsResponse);
-			return smsResponse;
 		} else {
 			log.info("SMS Repsonse " + smsResponse);
-			return smsResponse;
 		}
+		return userProfileData(registrationModel.getPhone_no());
 
 	}
 

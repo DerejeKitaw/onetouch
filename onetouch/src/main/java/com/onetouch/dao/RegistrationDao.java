@@ -9,5 +9,5 @@ public interface RegistrationDao {
 
 	public RegistrationModel registerUser(RegistrationModel registrationModel);
 	public RegistrationModel validateLogin(LoginModel loginModel);
-	public String updateProfile(RegistrationModel registrationModel);
+	public RegistrationModel updateProfile(RegistrationModel registrationModel);
 }
