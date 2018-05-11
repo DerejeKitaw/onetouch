@@ -27,27 +27,24 @@ public class RegistrationDaoImpl implements RegistrationDao {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
-	public RegistrationModel userProfileData(String mobileNo)
-	{
+
+	public RegistrationModel userProfileData(String mobileNo) {
 		String updateDataQuery = ExtractingProperty.getProperty("updatedProfileData", "", "queries");
-		log.info("Profile Updation Query "+updateDataQuery);
-		RegistrationModel registrationModel=new RegistrationModel();
-		if(mobileNo!=null)
-		{
-			registrationModel=jdbcTemplate.queryForObject(updateDataQuery, new Object[] {mobileNo}, new BeanPropertyRowMapper<RegistrationModel>(RegistrationModel.class));
-			//log.info("Profile Data After Updation"+registrationModel.toString());
+		log.info("Profile Updation Query " + updateDataQuery);
+		RegistrationModel registrationModel = new RegistrationModel();
+		if (mobileNo != null) {
+			registrationModel = jdbcTemplate.queryForObject(updateDataQuery, new Object[] { mobileNo },
+					new BeanPropertyRowMapper<RegistrationModel>(RegistrationModel.class));
+			// log.info("Profile Data After Updation"+registrationModel.toString());
 			registrationModel.setMessage("profileUpdatedSuccessfully");
-			log.info("Profile Data After Message Updation"+registrationModel.toString());
+			log.info("Profile Data After Message Updation" + registrationModel.toString());
 			return registrationModel;
-		}
-		else {
+		} else {
 			registrationModel.setMessage("NoMobileNumber");
-			log.info("Profile Data After Message Updation"+registrationModel.toString());
+			log.info("Profile Data After Message Updation" + registrationModel.toString());
 			return registrationModel;
 		}
-		
-		
+
 	}
 
 	@Override
@@ -66,38 +63,28 @@ public class RegistrationDaoImpl implements RegistrationDao {
 		 * registrationModel.getProfile_pic(),
 		 * RegisterUtility.encrypt(registrationModel.getPassword()) });
 		 */
-		
-		try
-		{
-			int inserted = jdbcTemplate.update(registerUserQuery,
-					new Object[] { registrationModel.getFirst_name(), registrationModel.getLast_name(),
-							registrationModel.getPhone_no(), registrationModel.getEmail_id(), registrationModel.getRole(),
-							RegisterUtility.encrypt(registrationModel.getPassword()), registrationModel.getStatus() });
-			String smsResponse = "";
-		
-			if (inserted == 1) {
-				smsResponse = SendMessageUtility.sendSms(
-						ExtractingProperty.getProperty("successfullRegistration", "", "smsMessages"),
-						registrationModel.getPhone_no());
-				log.info("SMS Repsonse " + smsResponse);
-				
-				registrationModel.setMessage("successfullyRegistered");
-				log.info("After Registration Status "+registrationModel.toString());
-				return registrationModel;
-			} else {
-				log.info("SMS Repsonse " + smsResponse);
-				registrationModel.setMessage("failed");
-				log.info("After Registration Status "+registrationModel.toString());
-				return registrationModel;
-			}
-		}
-		
-		catch (DataAccessException e)
-		{
-		    throw new RuntimeException(e);
-		}
 
-		
+		int inserted = jdbcTemplate.update(registerUserQuery,
+				new Object[] { registrationModel.getFirst_name(), registrationModel.getLast_name(),
+						registrationModel.getPhone_no(), registrationModel.getEmail_id(), registrationModel.getRole(),
+						RegisterUtility.encrypt(registrationModel.getPassword()), registrationModel.getStatus() });
+		String smsResponse = "";
+
+		if (inserted == 1) {
+			smsResponse = SendMessageUtility.sendSms(
+					ExtractingProperty.getProperty("successfullRegistration", "", "smsMessages"),
+					registrationModel.getPhone_no());
+			log.info("SMS Repsonse " + smsResponse);
+
+			registrationModel.setMessage("successfullyRegistered");
+			log.info("After Registration Status " + registrationModel.toString());
+			return registrationModel;
+		} else {
+			log.info("SMS Repsonse " + smsResponse);
+			registrationModel.setMessage("failed");
+			log.info("After Registration Status " + registrationModel.toString());
+			return registrationModel;
+		}
 
 	}
 
@@ -142,12 +129,12 @@ public class RegistrationDaoImpl implements RegistrationDao {
 			updateFields += "profile_pic = '" + registrationModel.getProfile_pic() + "',";
 		}
 		log.info("updateFields :: " + updateFields);
-		
+
 		String updateProfileQuery = MessageFormat.format(ExtractingProperty.getProperty("updateProfile", "", "queries"),
 				updateFields.substring(0, updateFields.lastIndexOf(",")), registrationModel.getPhone_no());
 		log.info("updateProfileQuery :: " + updateProfileQuery);
 		int updated = jdbcTemplate.update(updateProfileQuery);
-		log.info("Profile Updated "+updated);
+		log.info("Profile Updated " + updated);
 		String smsResponse = "";
 		if (updated == 1) {
 			smsResponse = SendMessageUtility.sendSms(
