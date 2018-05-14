@@ -1,10 +1,10 @@
 package com.onetouch.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onetouch.models.LoginModel;
@@ -46,5 +46,12 @@ public class RegistrationController {
 	{
 		log.info("updateProfile :: "+registrationModel.toString());
 		return registerService.updateProfile(registrationModel);
+	}
+	
+	@RequestMapping(value="forgotPassword",method=RequestMethod.POST)
+	public String forgotPassword(@RequestParam("mobileNo") String phone_no)
+	{
+		log.info("forgotPassword :: "+phone_no);
+		return registerService.forgotPassword(phone_no);
 	}
 }

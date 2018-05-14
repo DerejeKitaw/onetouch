@@ -5,7 +5,6 @@ import java.text.MessageFormat;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -94,7 +93,7 @@ public class RegistrationDaoImpl implements RegistrationDao {
 		String loginQuery = ExtractingProperty.getProperty("validLogin", "", "queries");
 		log.info("loginQuery :: " + loginQuery);
 		System.out.println("loginQuery :: " + loginQuery);
-		log.info("password encryotion ::" + RegisterUtility.encrypt(loginModel.getPassword()));
+		log.info("password encryption ::" + RegisterUtility.encrypt(loginModel.getPassword()));
 		System.out.println("password encryotion ::" + RegisterUtility.encrypt(loginModel.getPassword()));
 		RegistrationModel registrationModel = jdbcTemplate.queryForObject(loginQuery,
 				new Object[] { loginModel.getEmail_id(), loginModel.getPhone_no(),
@@ -145,6 +144,26 @@ public class RegistrationDaoImpl implements RegistrationDao {
 			log.info("SMS Repsonse " + smsResponse);
 		}
 		return userProfileData(registrationModel.getPhone_no());
+
+	}
+
+	@Override
+	public String forgotPassword(String phone_no) {
+		// TODO Auto-generated method stub
+		String forgotPasswordQuery = ExtractingProperty.getProperty("forgotPassword", "", "queries");
+		log.info("loginQuery :: " + forgotPasswordQuery);
+		String encPassword = jdbcTemplate.queryForObject(forgotPasswordQuery, new Object[] { phone_no }, String.class);
+		log.info("Encrypted Password :: " + encPassword);
+		String smsResponse = "";
+		if (encPassword != "" || encPassword.length() != 0) {
+			log.info("Decrypted Password :: " + RegisterUtility.decrypt(encPassword));
+			smsResponse = SendMessageUtility.sendSms(MessageFormat.format(
+					ExtractingProperty.getProperty("forgotPassword", "", "smsMessages"), RegisterUtility.decrypt(encPassword)), phone_no);
+			return "passwordSent";
+		} else {
+			smsResponse = "";
+			return "wrongNumber";
+		}
 
 	}
 

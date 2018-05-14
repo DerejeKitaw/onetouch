@@ -10,4 +10,5 @@ public interface RegistrationDao {
 	public RegistrationModel registerUser(RegistrationModel registrationModel);
 	public RegistrationModel validateLogin(LoginModel loginModel);
 	public RegistrationModel updateProfile(RegistrationModel registrationModel);
+	public String forgotPassword(String phone_no);
 }

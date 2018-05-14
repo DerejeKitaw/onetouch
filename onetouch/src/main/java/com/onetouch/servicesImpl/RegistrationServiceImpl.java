@@ -32,4 +32,10 @@ public class RegistrationServiceImpl implements RegisterService {
 		return registrationDao.updateProfile(registrationModel);
 	}
 
+	@Override
+	public String forgotPassword(String phone_no) {
+		// TODO Auto-generated method stub
+		return registrationDao.forgotPassword(phone_no);
+	}
+
 }
