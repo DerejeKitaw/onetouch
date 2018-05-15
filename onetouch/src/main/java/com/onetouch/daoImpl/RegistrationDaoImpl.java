@@ -16,6 +16,7 @@ import com.onetouch.utilities.RegisterUtility;
 import com.onetouch.utilities.SendMessageUtility;
 
 import lombok.extern.slf4j.Slf4j;
+import oracle.jrockit.jfr.openmbean.RecordingOptionsType;
 
 @Repository
 @Slf4j
@@ -99,9 +100,20 @@ public class RegistrationDaoImpl implements RegistrationDao {
 				new Object[] { loginModel.getEmail_id(), loginModel.getPhone_no(),
 						RegisterUtility.encrypt(loginModel.getPassword()) },
 				new BeanPropertyRowMapper<RegistrationModel>(RegistrationModel.class));
-		System.out.println("extracted user info ::" + registrationModel.toString());
-		log.info("extracted user info ::" + registrationModel.toString());
-		return registrationModel;
+		
+		if(registrationModel.getPhone_no()!="" || registrationModel.getPhone_no().length()!=0)
+		{
+			log.info("extracted user info ::" + registrationModel.toString());	
+			registrationModel.setMessage("success");
+			return registrationModel;
+		}
+		else
+		{
+			log.info("extracted user info ::" + registrationModel.toString());
+			registrationModel.setMessage("failure");
+			return registrationModel;
+		}
+		
 	}
 
 	@Override
